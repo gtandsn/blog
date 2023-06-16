@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+const map1 = new WeakMap();
+    let obj1 = {a:1};////如果说这个obj1涉及的数据非常大
+    map1.set(obj1,2222)
+    obj1 = null;//map里面的数据成了永远都无法访问的数据，占用内存空间
+  </script>
+</body>
+</html>
