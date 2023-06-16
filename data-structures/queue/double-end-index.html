@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<script>
+  //双向队列，两头都可以进出
+  class DeQueue {
+    /**
+     *展示：{0: item0, 1: item1, 2: item2}
+      enqueue变成: {0: item0, 1: item1, 2: item2, 3: item3}
+      dequeue变成: {1: item1, 2: item2, 3: item3}
+    */
+    #item = {};
+    #count = 0;
+    #lowKeyCount = 0;
+
+    removeFront() {
+      if(this.empty()) {
+        return undefined;
+      }
+      const value = this.#item[this.#lowKeyCount];
+      delete this.#item[this.#lowKeyCount];
+      this.#lowKeyCount++;
+      return value;
+    }
+
+    removeBack() {
+      if(this.empty()) {
+        return undefined;
+      }
+      this.#count--;
+      const value = this.#item[this.#count];
+      delete this.#item[this.#count]
+      return value;
+    }
+
+    insertBack(elem) {
+      this.#item[this.#count] = elem;
+      this.#count++;
+    }
+
+    insertFront(elem) {
+      if(this.#lowKeyCount > 0) {
+        this.#item[this.#lowKeyCount--] = elem;
+      } else {
+
+        //这里会有移动元素会有效率问题
+        for(let i=this.#count;i>0;i--) {
+          this.#item[i] = this.#item[i-1]
+        }
+        this.#item[0] = elem;
+      }
+      this.#count++;
+    }
+
+    front() {
+      return this.#item[this.#lowKeyCount];
+    }
+    back() {
+      return this.#item[this.#count-1];
+    }
+    empty() {
+      return this.#count- this.#lowKeyCount === 0
+    }
+    size() {
+      return this.#count- this.#lowKeyCount
+    }
+  }
+
+  
+  function testhuiwen(str) {
+    let dequeue  = new DeQueue();
+
+    str = str.split(" ").join('').toLocaleLowerCase();
+    //入队
+    for(let i=0;i<str.length;i++) {
+      dequeue.insertBack(str[i]);
+    }
+
+    let flag = true;
+    while(dequeue.size() > 1) {
+      if(dequeue.removeBack() !== dequeue.removeFront()) {
+
+        flag = false;
+        break;
+      }
+    }
+    return flag;
+
+  }
+</script>
+</body>
+</html>
