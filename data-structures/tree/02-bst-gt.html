@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    compareConst = {
+      less: -1,
+      bigger: 1,
+      equal: 0
+    }
+    class Node {
+      constructor(key) {
+        this.key = key;
+        this.left = null;
+        this.right = null;
+
+      }
+    }
+
+    class Bst {
+      constructor() {
+        this.root = null;
+      }
+
+      compareFun(a, b) {
+        if (a === b) {
+          return compareConst.equal;
+        }
+        return b < a ? compareConst.less : compareConst.bigger;
+      }
+
+      insertNode(node, key) {
+        if (this.compareFun(node.key, key) === compareConst.less) {
+          if (node.left === null) {
+            node.left = new Node(key);
+          } else {
+            this.insertNode(node.left, key);
+          }
+
+        }
+        if (this.compareFun(node.key, key) === compareConst.bigger) {
+
+          if (node.right === null) {
+            node.right = new Node(key);
+          } else {
+            this.insertNode(node.right, key);
+          }
+        }
+      }
+      insert(key) {
+        if (!this.root) {
+          this.root = new Node(key);
+        } else {
+          this.insertNode(this.root, key);
+        }
+      }
+
+      //中序遍历  左-->根-->右
+      inOrderMap(callback) {
+        this.inOrderMapNode(this.root, callback);
+
+      }
+      inOrderMapNode(node, callback) {
+        if (node !== null) {
+          this.inOrderMapNode(node.left, callback);
+          callback(node);
+          this.inOrderMapNode(node.right, callback);
+        }
+      }
+
+      preOrderMap(callback) {
+        this.preOrderMapNode(this.root, callback);
+
+      }
+
+      //前序遍历：根-->左--右
+      preOrderMapNode(node, callback) {
+        if (node !== null) {
+          callback(node)
+          this.preOrderMapNode(node.left, callback);
+          this.preOrderMapNode(node.right, callback);
+        }
+      }
+
+      backOrderMap(callback) {
+        this.backOrderMapNode(this.root, callback);
+      }
+
+      //后序遍历： 左-->右-->根
+      backOrderMapNode(node, callback) {
+        if (node !== null) {
+          this.backOrderMapNode(node.left, callback);
+          this.backOrderMapNode(node.right, callback);
+          callback(node)
+        }
+      }
+
+      min() {
+        const result = this.minNode(this.root);
+        console.log(result);
+
+      }
+      minNode(node) {
+        let current = node;
+        while (current !== null && current.left !== null) {
+          current = current.left
+        }
+        return current.key;
+
+      }
+
+      max() {
+        const result = this.maxNode(this.root);
+        console.log(result);
+
+      }
+      maxNode(node) {
+        let current = node;
+        while (current !== null && current.right !== null) {
+          current = current.right
+        }
+        return current.key;
+
+      }
+
+      search(key) {
+        return this.searchNode(this.root, key);
+
+      }
+
+      searchNode(node, key) {
+
+        if (this.compareFun(node.key, key) === compareConst.less) {
+          if (node.left === null) {
+            return false;
+          } else {
+            return this.searchNode(node.left, key);
+          }
+
+        } else if (this.compareFun(node.key, key) === compareConst.bigger) {
+          if (node.right === null) {
+            return false;
+          } else {
+            return this.searchNode(node.right, key);
+          }
+        } else {
+          return true;
+        }
+
+      }
+
+
+      /**
+       * 四种场景：
+       *      1、当删除的元素没有左右节点的时候，直接把元素赋空
+       *      2、当删除的元素只有左节点的时候，当前节点的父节点的left指向当前节点的的left
+       *      3、当删除的元素只有右节点的时候，当前节点的父节点的right指向当前节点的的right
+       *      4、当删除的元素既有左节点又有右节点的时候， 找到删除节点右侧的最小节点，替换删除节点，然后把右侧节点的最小节点设置成null(因为右侧节点的最小节点比左侧的大)
+       * 
+      */
+      delete(key) {
+
+        this.deleteNode(this.root, key);
+      } 
+
+      deleteNode(node, key) {
+        if(node === null) {
+          return false;
+        }
+
+        if(this.compareFun(node.key, key) === compareConst.less) {
+          node.left = this.deleteNode(node.left, key);
+        } else if(this.compareFun(node.key, key) === compareConst.bigger) {
+          node.right = this.deleteNode(node.right, key);
+        } else {
+          //找到了
+          if(node.left === null && node.right === null) {
+            node = null;
+            return node;
+          } 
+
+          if(node.right !== null) {
+            node = node.right;
+            return node;
+
+          } else if(node.left !== null) {
+            node = node.left;
+            return node;
+
+          } else {
+
+            const target = this.minNode(node.right);
+            node.key = target.key;
+            node.right = this.deleteNode(node.right, target.key);
+            return node;
+          }
+        }
+
+      }
+
+
+
+
+    }
+    let mybst = new Bst();
+
+    mybst.insert(6);
+    mybst.insert(4);
+    mybst.insert(15);
+    mybst.insert(20);
+    mybst.insert(10);
+    mybst.insert(13);
+    /** 用于遍历
+    mybst.insert(100);
+    mybst.insert(80);
+    mybst.insert(90);
+    mybst.insert(70);
+    mybst.insert(110);
+    mybst.callback = (node) =>{
+      console.log(node.key);
+    }
+    
+    const tempTree = [{
+      id: 1,
+      children: [{
+        id: 11,
+        children: [{
+          id: 111,
+          display: "false",
+          children: []
+        }, {
+          id: 112,
+          display: "false",
+          children: []
+        }]
+      }, {
+        id: 12,
+        children: [],
+      }]
+    }]
+    */
+    function deleteChildren(tree) {
+      var newArr = [];
+      for (var i = 0; i < tree.length; i++) {
+        var item = tree[i];
+        if (item.display === "false") {
+          tree.splice(i--, 1);
+        } else {
+          if (item.children) {
+            item.children = deleteChildren(item.children);
+          }
+          newArr.push(item);
+        }
+      }
+      return newArr;
+
+    }
+
+    //var result = deleteChildren(tempTree);
+    // console.log(result);
+
+    function test1() {
+      var test = ['a', 'b', 'c', 'd', 'E'];
+      for (var i = 0; i < test.length; i++) {
+
+        if (test[i] === 'b') {
+          test.splice(i--, 1);
+
+        } else {
+          console.log('没有被删除的元素', test[i]);
+        }
+      }
+      console.log(test);
+    }
+  </script>
+</body>
+
+</html>
