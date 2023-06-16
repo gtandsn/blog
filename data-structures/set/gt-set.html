@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div><span>请输入第一个数 </span> <input id="n1" type="text" /></div>
+  <div><span>请输入第二个数 </span> <input id="n2" type="text" /></div>
+
+  <button onclick="add()">相加</button>
+  <button onclick="shenfa()">相乘</button>
+
+  <div><span>结果：</span><span id="r1"></span></div>
+  <script>
+    function add() {
+      let n1 = document.getElementById('n1').value;
+      let n2 = document.getElementById('n2').value;
+      let result = parseInt(n1) + parseInt(n2);
+      document.getElementById('r1').innerText = result;
+    }
+
+    function shenfa() {
+      let n1 = document.getElementById('n1').value;
+      let n2 = document.getElementById('n2').value;
+      let result = parseInt(n1) * parseInt(n2);
+      document.getElementById('r1').innerText = result;
+    }
+    class gtSet {
+      #item = {}
+
+      add(element) {
+
+        if (!this.has(element)) {
+
+          this.#item[element] = element;
+          return true;
+        }
+        return false;
+      }
+
+      delete(element) {
+
+        if (this.has(element)) {
+          delete this.#item[element];
+          return true;
+        }
+        return false;
+      }
+
+      clear() {
+
+        this.#item = {};
+      }
+
+      has(element) {
+        return element in this.#item;
+
+      }
+
+      keys() {
+        return Object.keys(this.#item);
+      }
+
+      values() {
+        return Object.values(this.#item);
+      }
+
+      size() {
+        return Object.keys().length;
+      }
+    }
+
+    let gtset = new gtSet();
+  </script>
+</body>
+
+</html>
