@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const compareConst = {
+      less: -1,
+      bigger: 1,
+      equ: 0
+    }
+
+    class Node {
+      constructor(key) {
+        this.key = key;
+        this.left = null;
+        this.right = null;
+      }
+    }
+
+    class BST {
+      constructor() {
+        this.root = null;
+      }
+
+      insert(key) {
+        if (!this.root) {
+          this.root = new Node(key);
+        } else {
+          this.insertNode(this.root, key);
+        }
+      }
+
+      compareFn(nodeValue, key) {
+        if (key === nodeValue) {
+          return compareConst.equ;
+        }
+        return key < nodeValue ? compareConst.less : compareConst.bigger;
+      }
+
+      insertNode(node, key) {
+        //小于的情况，插到左边
+        if (this.compareFn(node.key, key) === compareConst.less) {
+          if (node.left === null) {
+            node.left = new Node(key);
+          } else {
+            this.insertNode(node.left, key)
+          }
+        } else {
+          //大于插到左边
+          if (node.right === null) {
+            node.right = new Node(key);
+          } else {
+            this.insertNode(node.right, key)
+          }
+        }
+      }
+
+      //中序遍历 左子树---> 根结点 ---> 右子树
+      inOrderMap(cb) {
+        this.inOrderMapNode(this.root, cb);
+      }
+
+      inOrderMapNode(node, cb) {
+        if (node !== null) {
+          this.inOrderMapNode(node.left, cb);
+          cb(node.key);
+          this.inOrderMapNode(node.right, cb);
+        }
+      }
+
+      //先序遍历 根结点 ---> 左子树 ---> 右子树
+      preOrderMap(cb) {
+        this.preOrderMapNode(this.root, cb);
+      }
+
+      preOrderMapNode(node, cb) {
+        if (node !== null) {
+          cb(node.key);
+          this.preOrderMapNode(node.left, cb);
+          this.preOrderMapNode(node.right, cb);
+        }
+      }
+
+
+      //后序遍历 左子树 ---> 右子树 ---> 根结点
+      backOrderMap(cb) {
+        this.backOrderMapNode(this.root, cb);
+      }
+
+      backOrderMapNode(node, cb) {
+        if (node !== null) {
+          this.backOrderMapNode(node.left, cb);
+          this.backOrderMapNode(node.right, cb);
+          cb(node.key);
+        }
+      }
+
+      min() {
+        return this.minNode(this.root);
+      }
+
+      max() {
+        return this.maxNode(this.root);
+      }
+
+      maxNode(node) {
+        let current = node;
+        while (current != null && current.right != null) {
+          current = current.right;
+        }
+
+        return current;
+
+      }
+
+      minNode(node) {
+        let current = node;
+        while (current != null && current.left != null) {
+          current = current.left;
+        }
+
+        return current;
+      }
+
+
+      search(key) {
+        return this.searchNode(this.root, key);
+
+      }
+
+      searchNode(node, key) {
+        if (node === null) {
+          return false;
+        }
+        if (this.compareFn(node.key, key) === compareConst.less) {
+          return this.searchNode(node.left, key);
+
+        } else if (this.compareFn(node.key, key) === compareConst.bigger) {
+          return this.searchNode(node.right, key);
+        } else {
+          return true;
+        }
+      }
+
+      remove(key) {
+        this.removeNode(this.root, key);
+      }
+
+      /*
+      * 1、删除的元素下面没有子节点
+      * 2、删除的元素只有一个节点
+      * 3、删除的节点有两个节点
+      **/
+      removeNode(node, key) {
+        if(node === null) {
+          return null;
+        }
+        if(this.compareFn(node.key, key) === compareConst.less) {
+          node.left = this.removeNode(node.left, key);
+        } else if(this.compareFn(node.key, key) === compareConst.bigger) {
+          node.right = this.removeNode(node.right, key);
+        } else {
+          if(node.left === null && node.right===null) {
+            //删除的元素下面没有子节点
+            node = null;
+            return node;
+          } else if(node.left === null) {
+            //删除的元素只有右节点
+            node = node.right;
+            return node;
+
+          } else if(node.right === null) {
+            //删除的元素只有左节点
+            node = node.left;
+            return node;
+
+          } else {
+            ////删除的元素有右节点又有左节点
+            //找到删除节点右侧最小的节点，替换当前节点的key值，然后删除右侧最小的节点
+
+            const target = this.minNode(node.right);
+            node.key = target.key;
+            node.right = this.removeNode(node.right, target.key);
+            return node;
+
+          }
+        }
+      }
+
+    }
+
+    let mybst = new BST();
+    // mybst.insert(100);
+    // mybst.insert(80);
+    // mybst.insert(90);
+    // mybst.insert(70);
+    // mybst.insert(110);
+    // mybst.insert(60);
+    // mybst.insert(75);
+    // mybst.insert(89);
+    // mybst.insert(93);
+
+
+    // mybst.insert(3);
+    // mybst.insert(2);
+    // mybst.insert(5);
+    // mybst.insert(1);
+    // mybst.insert(4);
+
+    // mybst.insert(3);
+    // mybst.insert(2);
+    // mybst.insert(5);
+    // mybst.insert(1);
+    // mybst.insert(4);
+    // mybst.insert(6);
+    mybst.insert(3);
+    mybst.insert(5);
+    mybst.insert(7);
+    mybst.insert(8);
+    mybst.insert(9);
+    mybst.insert(10);
+
+    let myCallBack = (key) => {
+      console.log(key);
+    }
+    mybst.backOrderMap(myCallBack);
+  </script>
+</body>
+
+</html>
