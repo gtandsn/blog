@@ -1,1 +1,40 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<script>
+//当数组内成员为同一类，则为连续内存，当数组成员存在数组，字符串，那么就会分配非连续的内存，\
+//多个非连续内存会形成一个链表，当存储数据数量级庞大的时候，就会造成效率低下的问题
+
+function _diff() {
+  let arr = [];
+  arr.push({name: "gt"})
+  console.time("_diff");
+  for(let i=0; i<10000000;i++) {
+    arr.push(i);
+  } 
+  console.timeEnd("_diff");
+}
+
+function _same() {
+  let arr = [];
+  console.time("_same");
+  for(let i=0; i<10000000;i++) {
+    arr.push(i);
+  } 
+  console.timeEnd("_same");
+}
+console.log('start');
+_diff();
+_same();
+console.log('end');
+</script>
+</body>
+</html>
