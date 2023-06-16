@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<script>
+  //后进先出
+  class Queue {
+    /**
+     *展示：{0: item0, 1: item1, 2: item2}
+      enqueue变成: {0: item0, 1: item1, 2: item2, 3: item3}
+      dequeue变成: {1: item1, 2: item2, 3: item3}
+    */
+    #item = {};
+    #count = 0;
+    #lowKeyCount = 0;
+
+    dequeue() {
+      if(this.empty()) {
+        return undefined;
+      }
+      const value = this.#item[this.#lowKeyCount];
+      delete this.#item[this.#lowKeyCount];
+      this.#lowKeyCount++;
+      return value;
+    }
+    enqueue(elem) {
+      this.#item[this.#count] = elem;
+      this.#count++;
+    }
+    front() {
+      return this.#item[this.#lowKeyCount];
+    }
+    empty() {
+      return this.#count- this.#lowKeyCount === 0
+    }
+    size() {
+      return this.#count- this.#lowKeyCount
+    }
+  }
+
+  let queue  = new Queue();
+
+  function game(list, num) {
+    let queue = new Queue();
+    //放入队列
+    for(let i=0; i< list.length; i++) {
+      queue.enqueue(list[i]);
+    }
+
+    while(queue.size() >1 ) {
+      for(let i=0;i<num;i++) {
+        queue.enqueue(queue.dequeue());
+      }
+      console.log(queue.dequeue(), ' 淘汰了');
+    }
+
+    console.log(queue.dequeue(), '胜利');
+
+  }
+
+  game(['A','B','C','D','E','F','G','H','I'], 2);
+   
+</script>
+</body>
+</html>
