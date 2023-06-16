@@ -1,1 +1,229 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    class NodeT {
+      constructor(data) {
+        this.element = data;
+        this.next = null;
+      }
+    }
+
+    class LinkList {
+      constructor() {
+        this.head = null;
+        this.count = 0;
+      }
+      push(elem) {
+        let node = new Node(elem);
+        if (!this.head) {
+          this.head = node;
+        } else {
+          let current = this.head;
+          while (current.next !== null) {
+            current = current.next;
+          }
+          current.next = node;
+        }
+        this.count++;
+      }
+
+      removeAt(index) {
+        if (index >= 0 && index < this.count) {
+          let current = this.head;
+          if (index === 0) {
+            this.head = this.head.next;
+          } else {
+            let previous;
+            for (let i = 0; i < index; i++) {
+              previous = current;
+              current = current.next;
+            }
+            previous.next = current.next;
+            this.count--;
+          }
+
+          return current.element;
+        }
+      }
+
+      removeAt2(index) {
+        if (index >= 0 && index < this.count) {
+          let current = this.head;
+          if (index === 0) {
+            this.head = this.head.next;
+          } else {
+            let previous = this.getNodeAt(index - 1);
+            let current = this.getNodeAt(index)
+            previous.next = current.next;
+
+          }
+          this.count--;
+          return current.element;
+        }
+      }
+
+      getNodeAt(index) {
+        if (index >= 0 && index < this.count) {
+          let node = this.head
+          for (let i = 0; i < index; i++) {
+            node = node.next;
+          }
+          return node;
+        }
+        return;
+      }
+
+      equalFn(element, currentElem) {
+        //这里面可以用各种方法去比较
+        return JSON.stringify(element) === JSON.stringify(currentElem)
+      }
+
+      remove(element) {
+        //找到元素的索引，调用removeAt2方法就可以了
+        let current = this.head;
+        for (let i = 0; i < this.count; i++) {
+          if (this.equalFn(element, current.element)) {
+            this.removeAt2(i);
+            return i;
+          }
+          current = current.next;
+        }
+        return -1;
+      }
+
+      insert(element, index) {
+        //向指定位置插入元素
+        if (index > this.count) {
+          this.push(element);
+        } else if (index === 0) {
+          let node = new Node(elem);
+          node.next = this.head;
+          this.head = node;
+          this.count++;
+        } else {
+          let node = new Node(element);
+          let previous = this.getNodeAt(index - 1);
+          let current = this.getNodeAt(index)
+          previous.next = node;
+          node.next = current;
+          this.count++;
+        }
+      }
+
+      isEmpty() {
+        return this.count === 0;
+      }
+      size() {
+        return this.count;
+
+      }
+      getHead() {
+        return this.head;
+      }
+    }
+
+    //用继承
+
+    class DoubleyNode extends NodeT {
+      constructor(element) {
+        super(element);
+        this.pre = null;
+      }
+    }
+
+    class DoubleyLinkList extends LinkList {
+      constructor() {
+        super();
+        this.tail = null;
+      }
+
+      push(elem) {
+        let node = new DoubleyNode(elem);
+        if (this.size() === 0) {
+          this.head = node;
+          this.tail = node;
+        } else {
+          let current = this.tail;
+          this.tail.next = node;
+          node.pre = this.tail;
+
+          this.tail = node;
+        }
+        this.count++;
+      }
+
+      insert(element, index) {
+        let node = new NodeT(element);
+        if (index >= 0 && index <= this.count) {
+          if (index === 0) {
+            if (this.size() === 0) {
+              this.head = node;
+              this.tail = node;
+            } else {
+              node.next = this.head;
+              this.head.pre = node;
+              this.head = node;
+            }
+          } else if (index === this.count) {
+            this.tail.next = node;
+            node.pre = this.tail;
+            this.tail = node;
+
+          } else {
+            let previous = this.getNodeAt(index - 1);
+            let current = this.getNodeAt(index);
+
+            previous.next = node;
+            node.pre = previous
+            node.next = current;
+            current.pre = node;
+          }
+          this.count++;
+        }
+      }
+
+      removeAt(index) {
+        if(index >=0 && index < this.count) {
+          let current = this.head;
+          if(index === 0) {
+            this.head = current.next;
+            if(this.count === 1) {
+              this.tail = null;
+            } else {
+              current.pre = null;
+            }
+            this.count--;
+          } else if(index === this.count -1) {
+            this.tail.pre.next = null
+            this.tail = this.tail.pre;
+            this.count--;
+
+          }else {
+
+            let pre = this.getNodeAt(index -1);
+            let current = pre.next;
+
+            pre.next = current.next;
+            current.next.pre = pre;
+            this.count--;
+
+          }
+        }
+      }
+    }
+
+    let doubleyLink = new DoubleyLinkList();
+  </script>
+</body>
+
+</html>
