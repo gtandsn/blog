@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //把值和value封装到一个对象，方便操作
+    class ValuePair {
+      constructor(key, value) {
+        this.key = key;
+        this.value = value;
+      }
+    }
+
+    class gtMap {
+      #table = {};
+      
+      /**
+       * 防止类型转换
+       * 比如：set({a:1},111) 与 set({b:2},222)通过类型转换以后，key都是一样的
+       * 
+      */
+      toStrFn(key) {
+        if(key === null) {
+          return "NULL";
+        } else if(key === undefined) {
+          return "UNDEFINED";
+        } else if(typeof key === 'string' && key instanceof String) {
+          return key
+        } else {
+          return JSON.stringify(key);
+        }
+      }
+      set(key, value) {
+        if(!this.haskey(this.toStrFn(key))) {
+          this.#table[this.toStrFn(key)] = new ValuePair(key ,value);
+          return true;
+        }
+
+        return false;
+      }
+
+      get(key) {
+
+        if(this.haskey(key)) {
+          return this.#table[this.toStrFn(key)] ? this.#table[this.toStrFn(key)].value : ''; 
+        } 
+        return null;
+      }
+
+      haskey(key) {
+        return this.toStrFn(key) in this.#table;
+
+      }
+      keys() {
+       return Object.keys(this.#table);
+      }
+
+      values() {
+
+        return this.valueKeys().map(item => item.value);
+      }
+      valueKeys() {
+        return Object.values(this.#table);
+      }
+
+      size() {
+        return this.keys().length;
+      }
+      
+      clear() {
+        this.#table = {};
+      }
+
+      foreach(cb) {
+         this.valueKeys().forEach(item => {
+          console.log('内部', item.key);
+          console.log('内部', item.value);
+          cb(item);
+          
+         })
+      }
+    }
+
+    let gtmap = new gtMap();
+    gtmap.set('name', '1111');
+    gtmap.set({a:1}, '222');
+    gtmap.foreach((item) => {
+
+      console.log(item.key);
+      console.log(item.value);
+    })
+  </script>
+</body>
+</html>
