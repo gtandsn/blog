@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+
+  <script>
+    //参考图：https://visualgo.net/zh/sorting
+
+    function swap(arr, a, b) {
+      const temp = arr[a];
+      arr[a] = arr[b];
+      arr[b] = temp;
+    }
+
+    function bubble() {
+      const testArr = randNumber(10);
+      console.log("before:", testArr.toString());
+
+      for (let i = 0; i < testArr.length; i++) {
+
+        for(j = 0;j<testArr.length - i; j++) {
+          if(testArr[j] > testArr[j+1]) {
+            swap(testArr,j, j+1);
+          }
+        }
+
+
+      }
+
+      console.log("after", testArr.toString());
+
+    }
+
+    function randNumber(count) {
+
+      let testArr = [];
+      for (let i = 0; i < count; i++) {
+        testArr.push(Math.floor(Math.random() * 100));
+      }
+      return testArr;
+    }
+
+    
+   bubble();
+  </script>
+</body>
+
+</html>
