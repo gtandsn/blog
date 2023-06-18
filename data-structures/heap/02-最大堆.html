@@ -1,1 +1,104 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+compareConst = {
+  bigger: 1, 
+  less: -1,
+  equal: 0
+}
+    class maxHeap {
+      constructor() {
+        this.heap = [];
+      }
+
+
+      insert(node) {
+        this.heap.push(node);
+        this.shiftUp(this.heap, this.heap.length - 1)
+        return true;
+
+      }
+      
+      getParentIndex(index) {
+        return Math.floor((index-1)/2);
+      }
+
+      compareFn(a,b) {
+
+        if(a === b) return compareConst.equal;
+        return a > b? compareConst.bigger : compareConst.less;
+      }
+
+      swap(arr, a, b) {
+        const temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+      }
+      shiftUp(arr, index) {
+        let parentIndex = this.getParentIndex(index);
+
+        while(index > 0 && this.compareFn(this.heap[index], this.heap[parentIndex]) === compareConst.bigger) {
+          this.swap(this.heap, index, parentIndex);
+          index = parentIndex;
+          parentIndex = this.getParentIndex(index);
+        }
+      }
+
+      extract() {
+
+        let removed = this.heap[0];
+        this.heap[0] = this.heap.pop();
+
+        return removed;
+
+      }
+
+      getRightIndex(index) {
+        return 2* index +2;
+      }
+
+      getLeftIndex(index) {
+        return 2* index +1
+      }
+
+      shiftDown(arr, index) {
+        let current = index;
+        let rightIndex = this.getRightIndex(index);
+        let leftIndex = this.getLeftIndex(index);
+
+        if(this.compareFn(this.heap[current], this.heap[leftIndex])  === compareConst.less) {
+          current = left;
+        }
+        
+        if(this.compareFn(this.heap[current], this.heap[rightIndex])  === compareConst.less) {
+          current = rightIndex;
+        }
+
+        if(index !== current) {
+          this.swap(this.heap, current, index);
+          this.shiftDown(this.heap, current);
+        }
+      }
+
+
+    }
+
+    let mymaxheap = new maxHeap();
+    mymaxheap.insert(1);
+    mymaxheap.insert(5);
+    mymaxheap.insert(8);
+    mymaxheap.insert(9);
+    mymaxheap.insert(10);
+  </script>
+
+</body>
+</html>
