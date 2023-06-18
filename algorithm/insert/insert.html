@@ -1,1 +1,57 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function swap(arr, a, b) {
+      const temp = arr[a];
+      arr[a] = arr[b];
+      arr[b] = temp;
+    }
+
+    function randNumber(count) {
+
+      let testArr = [];
+      for (let i = 0; i < count; i++) {
+        testArr.push(Math.floor(Math.random() * 100));
+      }
+      return testArr;
+    }
+
+    function insertSort() {
+      let testArr = randNumber(10)
+      console.log("before:", testArr.toString());
+
+      for (let i = 0; i < testArr.length; i++) {
+        //前面一部分元素是有序的，用排好序的下一个无素，依次与前面的元素相比较，找到位置再插入，不是每次比都要交换位置 
+
+        let current = testArr[i];
+        let preindex = i-1;
+        while(preindex >= 0 && current < testArr[preindex]) {
+          testArr[preindex + 1] = testArr[preindex];
+          preindex--;
+
+        }
+
+        //找到位置，插入元素
+        testArr[preindex + 1] = current;
+      }
+
+
+      console.log("after:", testArr.toString());
+
+    }
+
+    insertSort()
+  </script>
+</body>
+
+</html>
