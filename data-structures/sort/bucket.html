@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+     桶排序的基本思想：
+                    1、先创建需要几个桶
+                    2、再把数据放入对庆的桶中
+                    3、对桶中的数据进行插入排序(在数据量小的情况下，插入排序的效率相当的高)
+                    4、把每个排好序的桶连接起来
+    **/
+
+    const testArr = [5, 4, 3, 2, 6, 1, 7, 10, 9, 8];
+
+    function bucketSort(arr, bucketSize = 3) {
+      if (arr.length < 2) {
+        return arr;
+      }
+      const buckets = createBuckets(arr, bucketSize);
+      const result = sort(buckets);
+      console.log(result.toString())
+
+    }
+
+
+    function sort(buckets) {
+      let sortResult = [];
+      for (let i = 0; i < buckets.length; i++) {
+        if (buckets[i]) {
+          const temp = insertSort(buckets[i])
+          sortResult = sortResult.concat(temp);
+        }
+      }
+
+      return sortResult;
+    }
+
+    function insertSort(arr) {
+      const {
+        length
+      } = arr;
+
+      for (let i = 0; i < length; i++) {
+        const currentValue = arr[i];
+        let preindex = i - 1;
+
+        while (preindex >= 0 && currentValue < arr[preindex]) {
+          arr[preindex + 1] = arr[preindex];
+          preindex--;
+        }
+        arr[preindex + 1] = currentValue;
+      }
+      return arr;
+
+    }
+
+    function createBuckets(arr, bucketSize) {
+
+      let maxVaue = Math.max(...arr);
+      let minVaue = Math.min(...arr);
+      //通过桶中元素的个数，确认桶的个数
+      let bucketsCount = Math.floor((maxVaue - minVaue) / bucketSize) + 1;
+
+      //创建空的bucket
+      let buckets = [];
+      buckets = [...new Array(bucketsCount)].map(item => item = []);
+
+      //把数据放入buckets中
+      for (let i = 0; i < arr.length; i++) {
+        //如何理解这一步？
+        const index = Math.floor((arr[i] - minVaue) / bucketSize)
+        buckets[index].push(arr[i]);
+      }
+      console.log(buckets);
+      return buckets;
+    }
+    bucketSort(testArr);
+  </script>
+
+
+</body>
+
+</html>
